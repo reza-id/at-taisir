@@ -1,0 +1,23 @@
+.example-container {
+    width: 100%;
+    height: 100%;
+}
+  
+.example-sidenav-content {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+  
+.example-sidenav {
+    padding: 20px;
+}
+
+.menu-button {
+    top: 5px !important;
+    right: 10px !important;
+    bottom: auto !important;
+    left: auto !important;
+    position: fixed !important;
+}
