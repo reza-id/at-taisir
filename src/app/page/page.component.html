@@ -1,1 +1,3 @@
-<mat-card class="page-card" [ngStyle]="{'font-family': pageNumber}" [innerHTML]="text"></mat-card>
+<mat-card class="page-card" [ngStyle]="{'font-family': pageNumber}">
+    <app-ayat *ngFor="let ayat of listAyat" [ayat]="ayat"></app-ayat>
+</mat-card>

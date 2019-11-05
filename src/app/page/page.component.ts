@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Ayat } from './ayat/ayat.model';
 declare let FontFace: any;
 
 @Component({
@@ -11,6 +13,9 @@ export class PageComponent implements OnInit {
   @Input() page;
   pageNumber: string;
   text: string;
+  listAyat: Ayat[] = [];
+
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.loadFont(this.page);
@@ -19,6 +24,24 @@ export class PageComponent implements OnInit {
     } else {
       this.text = 'ﭑ ﭒ ﭓ ﭔ ﭕ ﭖ ﭗ ﭘ ﭙ<br>ﭚ ﭛ ﭜ ﭝ ﭞ ﭟ ﭠ ﭡ ﭢﭣ<br>ﭤ ﭥ ﭦ ﭧ ﭨ ﭩﭪ ﭫ ﭬ ﭭ ﭮ<br>ﭯ ﭰ ﭱ ﭲ ﭳ ﭴ ﭵ ﭶ ﭷ<br>ﭸ ﭹ ﭺﭻ ﭼ ﭽ ﭾﭿ ﮀ ﮁ<br>ﮂ ﮃﮄ ﮅ ﮆ ﮇ ﮈ ﮉ ﮊ ﮋ ﮌ ﮍ<br>ﮎ ﮏ ﮐ ﮑ ﮒ ﮓ ﮔﮕ ﮖ ﮗ ﮘ<br>ﮙ ﮚ ﮛﮜ ﮝ ﮞ ﮟ ﮠ ﮡ <br>ﮢ ﮣ ﮤ ﮥ ﮦ ﮧﮨ ﮩ ﮪ<br>ﮫ ﮬ ﮭ ﮮ ﮯ ﮰ ﮱ ﯓ ﯔ <br>ﯕ ﯖ ﯗ ﯘ ﯙ ﯚﯛ ﯜ ﯝ ﯞ ﯟ <br>ﯠ ﯡﯢ ﯣ ﯤ ﯥ ﯦ ﯧ ﯨ ﯩ <br>ﯪ ﯫ ﯬ ﯭ ﯮ ﯯ ﯰ ﯱ ﯲ <br>ﯳ ﯴ ﯵ ﯶﯷ ﯸ ﯹ ﯺ ﯻ ﯼ <br>ﯽ ﯾ ﯿ ﰀ ﰁ ﰂﰃ ﰄ ﰅ';
     }
+    this.http.get<Ayat[]>(`https://reza-id.herokuapp.com/ayat/${this.page}`)
+      .subscribe(data => {
+        let listAyat = [];
+        let currentLine = 1;
+        for (let i = 0; i < data.length; i++) {
+          const ayat = data[i];
+          for (let j=0; j < ayat.words.length; j++) {
+            if (currentLine != ayat.words[j].line_number) {
+              ayat.words[j].isNewLine = true;
+              currentLine = ayat.words[j].line_number;
+            }
+          }
+          listAyat.push(ayat);
+        }
+        this.listAyat = listAyat;
+      }, error => {
+        console.log(error);
+      });
   }
 
   loadFont(page: string) {
