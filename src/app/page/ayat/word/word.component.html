@@ -1,5 +1,8 @@
 <br *ngIf="word.isNewLine">
 <span dir="ltr"
+    (click)="onClick()"
+    class="word"
+    [class.hidden]="word.isHidden"
     [matTooltip]="translation"
     [matTooltipClass]="tooltipclass"
     [innerHTML]="word.code"></span>

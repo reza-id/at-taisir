@@ -23,16 +23,17 @@ export class PageComponent implements OnInit {
         let listAyat = [];
         let currentLine = 1;
         for (let i = 0; i < data.length; i++) {
-          const ayat = data[i];          
+          const ayat = data[i];
           const trans = ayat.translations[0];
-          for (let j=0; j < ayat.words.length; j++) {
+          for (let j = 0; j < ayat.words.length; j++) {
             if (currentLine != ayat.words[j].line_number) {
+              // give <br> tag
               if (ayat.verse_number != 1 || ayat.words[j].position != 1) {
                 ayat.words[j].isNewLine = true;
               }
               currentLine = ayat.words[j].line_number;
             }
-            
+
             if (j == (ayat.words.length - 1)) {
               ayat.words[j].translation = [{
                 id: trans.id,
@@ -41,6 +42,11 @@ export class PageComponent implements OnInit {
                 resource_id: trans.resource_id
               }];
               ayat.words[j].isAyatNumber = true;
+            }
+            
+            // hide ayat per ayat
+            if (currentLine > 3) {
+              ayat.words[j].isHidden = true;
             }
           }
           listAyat.push(ayat);

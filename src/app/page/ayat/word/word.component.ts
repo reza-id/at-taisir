@@ -25,4 +25,8 @@ export class WordComponent implements OnInit {
     if (this.word.isAyatNumber) this.tooltipclass = 'tooltip-red';
   }
 
+  onClick() {
+    this.word.isHidden = false;
+  }
+
 }
