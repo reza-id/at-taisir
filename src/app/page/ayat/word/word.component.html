@@ -1,3 +1,5 @@
 <br *ngIf="word.isNewLine">
-<span
+<span dir="ltr"
+    [matTooltip]="translation"
+    [matTooltipClass]="tooltipclass"
     [innerHTML]="word.code"></span>
