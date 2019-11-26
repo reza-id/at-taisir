@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Ayat } from './ayat/ayat.model';
 declare let FontFace: any;
@@ -8,7 +8,7 @@ declare let FontFace: any;
   templateUrl: './page.component.html',
   styleUrls: ['./page.component.scss']
 })
-export class PageComponent implements OnInit {
+export class PageComponent implements OnInit, OnChanges {
 
   @Input() page;
   pageNumber: string;
@@ -17,6 +17,16 @@ export class PageComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
+    this.loadPage();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.page) {
+      this.loadPage();
+    }
+  }
+
+  loadPage() {
     this.loadFont(this.page);
     this.http.get<Ayat[]>(`https://reza-id.herokuapp.com/ayat/${this.page}`)
       .subscribe(data => {
@@ -43,7 +53,7 @@ export class PageComponent implements OnInit {
               }];
               ayat.words[j].isAyatNumber = true;
             }
-            
+
             // hide ayat per ayat
             if (currentLine > 3) {
               ayat.words[j].isHidden = true;

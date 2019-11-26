@@ -25,13 +25,9 @@
     </mat-list>
   </mat-drawer>
 
-  <div style="padding: 20px;" fxLayout='row' fxLayout.lt-md='column' fxLayoutAlign="center center">
-    <app-page [page]="585"></app-page>
-    <app-page [page]="584"></app-page>
-    <router-outlet></router-outlet>
-    <button mat-icon-button (click)="drawer.toggle()" class="menu-button">
-      <mat-icon>menu</mat-icon>
-    </button>
-  </div>
+  <router-outlet></router-outlet>
 
+  <button mat-icon-button (click)="drawer.toggle()" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
 </mat-drawer-container>

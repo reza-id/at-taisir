@@ -10,10 +10,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { AyatComponent } from './page/ayat/ayat.component';
 import { WordComponent } from './page/ayat/word/word.component';
+import { PagesContainerComponent } from './pages-container/pages-container.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    PagesContainerComponent,
     PageComponent,
     AyatComponent,
     WordComponent
