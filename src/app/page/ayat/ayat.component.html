@@ -1,4 +1,5 @@
-<br *ngIf="ayat.verse_number == 1">
-<br *ngIf="ayat.verse_number == 1">
-<div *ngIf="ayat.verse_number == 1" style="text-align: center;">﷽</div>
-<app-word *ngFor="let word of ayat.words" [word]="word"></app-word>
+<div *ngIf="ayat.verse_number == -1" class="bismillah" style="color:#2ca4ab;"[innerHTML]="ayat.text_simple"></div>
+<div *ngIf="ayat.verse_number == 0" class="bismillah">&#xfb51;&#xfb52;&#xfb53;</div>
+<ng-container *ngIf="ayat.verse_number > 0">
+    <app-word *ngFor="let word of ayat.words" [word]="word" (wordClick)="onAyatClick($event)"></app-word>
+</ng-container>

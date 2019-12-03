@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Ayat } from './ayat.model';
+import { Word } from './word/word.model';
 
 @Component({
   selector: 'app-ayat',
@@ -9,10 +10,15 @@ import { Ayat } from './ayat.model';
 export class AyatComponent implements OnInit {
 
   @Input() ayat: Ayat
+  @Output() ayatClick = new EventEmitter<Word>();
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onAyatClick(word: Word) {
+    this.ayatClick.emit(word);
   }
 
 }

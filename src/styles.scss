@@ -2,3 +2,9 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@font-face {
+    font-family: bismillahFont;
+    src: url('assets/BSML.woff') format('woff');
+  }
+  .bismillah { font-family: bismillahFont; text-align: center; font-size: 1.5rem; line-height: 165%;}

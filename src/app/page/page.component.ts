@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Ayat } from './ayat/ayat.model';
+import { Word } from './ayat/word/word.model';
 declare let FontFace: any;
 
 @Component({
@@ -11,6 +12,7 @@ declare let FontFace: any;
 export class PageComponent implements OnInit, OnChanges {
 
   @Input() page;
+  @Input() isOpenPerAyat;
   pageNumber: string;
   listAyat: Ayat[] = [];
 
@@ -23,6 +25,17 @@ export class PageComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.page) {
       this.loadPage();
+    }
+  }
+
+  onAyatClick(word: Word) {
+    if (this.isOpenPerAyat) {
+      this.listAyat.find(i => i.verse_key == word.verse_key)
+        .words.forEach(w => {
+          w.isHidden = false;
+        });
+    } else {
+      word.isHidden = false;
     }
   }
 
@@ -55,7 +68,7 @@ export class PageComponent implements OnInit, OnChanges {
             }
 
             // hide ayat per ayat
-            if (currentLine > 3) {
+            if (this.isOpenPerAyat) {
               ayat.words[j].isHidden = true;
             }
           }
@@ -70,11 +83,24 @@ export class PageComponent implements OnInit, OnChanges {
   loadFont(page: string) {
     this.pageNumber = `page${page}`;
     let customFont = new FontFace(this.pageNumber, `url(https://quran-1f14.kxcdn.com/fonts/ttf/p${page}.ttf)`);
-    customFont.load().then((res) => {
-      document['fonts'].add(res);
-    }).catch((error) => {
-      console.log(error);
-    });
+    if (document['loadedfont']) {
+      if (!document['loadedfont'].includes(this.pageNumber)) {
+        customFont.load().then((res) => {
+          document['fonts'].add(res);
+          document['loadedfont'].push(this.pageNumber);
+        }).catch((error) => {
+          console.log(error);
+        });
+      }
+    } else {
+      document['loadedfont'] = [];
+      customFont.load().then((res) => {
+        document['fonts'].add(res);
+        document['loadedfont'].push(this.pageNumber);
+      }).catch((error) => {
+        console.log(error);
+      });
+    } 
   }
 
 }

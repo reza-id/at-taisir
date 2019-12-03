@@ -2,8 +2,8 @@
     <button mat-stroked-button aria-label="Previous Page" (click)="prevPage()">
         <mat-icon>skip_next</mat-icon>
     </button>
-    <app-page [page]="kanan"></app-page>
-    <app-page [page]="kiri"></app-page>
+    <app-page [page]="kanan" [isOpenPerAyat]="isOpenPerAyat"></app-page>
+    <app-page [page]="kiri" [isOpenPerAyat]="isOpenPerAyat"></app-page>
     <button mat-stroked-button aria-label="Next Page" (click)="nextPage()">
         <mat-icon>skip_previous</mat-icon>
     </button>

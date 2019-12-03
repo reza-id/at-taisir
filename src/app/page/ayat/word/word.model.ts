@@ -9,5 +9,6 @@ export interface Word {
     line_number: number;
     page_number: number;
     code: string;
+    verse_key: string;
     translation: WordTranslation[];
 }

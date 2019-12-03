@@ -7,6 +7,8 @@ export interface Ayat {
     chapter_id: number;
     juz_number: number;
     page_number: number;
+    verse_key: string;
+    text_simple: string;
     translations: AyatTranslation[];
     words: Word[];
 }

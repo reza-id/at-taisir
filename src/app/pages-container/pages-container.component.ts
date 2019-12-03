@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
@@ -7,6 +7,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
   styleUrls: ['./pages-container.component.scss']
 })
 export class PagesContainerComponent implements OnInit {
+
+  @Input() isOpenPerAyat = true;
 
   page: number;
   isOdd: boolean;
@@ -18,6 +20,7 @@ export class PagesContainerComponent implements OnInit {
 
   ngOnInit() {
     this.page = +this.route.snapshot.params['page'];
+    this.isOpenPerAyat = this.route.snapshot.queryParams['per-ayat'];
     this.reloadPage();
 
     this.route.params
@@ -25,6 +28,11 @@ export class PagesContainerComponent implements OnInit {
         (params: Params) => {
           this.page = +params['page'];
           this.reloadPage();
+        }
+      );
+      this.route.queryParams.subscribe(
+        (params: Params) => {
+          this.isOpenPerAyat = params['per-ayat'];
         }
       );
   }
@@ -41,11 +49,11 @@ export class PagesContainerComponent implements OnInit {
   }
 
   nextPage() {
-    this.router.navigate([this.kiri+1]);
+    this.router.navigate([this.kiri+1], { queryParamsHandling: "merge" });
   }
 
   prevPage() {
-    this.router.navigate([this.kanan-1]);
+    this.router.navigate([this.kanan-1], { queryParamsHandling: "merge"});
   }
 
 }

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+declare let FontFace: any;
+
 export interface Section {
   name: string;
   updated: Date;

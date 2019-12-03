@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import { Word } from './word.model';
 
 @Component({
@@ -12,6 +12,7 @@ import { Word } from './word.model';
 export class WordComponent implements OnInit {
 
   @Input() word: Word
+  @Output() wordClick = new EventEmitter<Word>();
   translation = '';
   tooltipclass = 'tooltip-normal';
 
@@ -25,8 +26,8 @@ export class WordComponent implements OnInit {
     if (this.word.isAyatNumber) this.tooltipclass = 'tooltip-red';
   }
 
-  onClick() {
-    this.word.isHidden = false;
+  onWordClick() {
+    this.wordClick.emit(this.word);
   }
 
 }
