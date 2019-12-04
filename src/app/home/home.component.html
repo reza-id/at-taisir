@@ -20,9 +20,11 @@
                 <b>Mulai dari halaman</b>
             </mat-label>
             <mat-hint><span style="color: red;">*data yang tersedia baru dari Juz 29-30</span></mat-hint>
-        </mat-form-field><br><br><br><br>
+        </mat-form-field>
+        
+        <p class="alert alert-danger" *ngIf="screenWidth < 424">Lebar layar Anda mungkin dapat menyebabkan teks kurang terlihat sempurna, silahkan coba dengan mode landscape atau buka melalui browser PC.</p><br><br><br><br>
 
         <button mat-stroked-button aria-label="MULAI" (click)="start()">MULAI</button><br><br>
-        <p style="font-size: xx-small; text-align: right; width: 100%;">Info : <a href="https://api.whatsapp.com/send?phone=6281515888872">081515888872</a></p>
+        <p style="font-size: xx-small; text-align: right; width: 100%;">Berikan Saran : <a href="https://api.whatsapp.com/send?phone=6281515888872">081515888872</a></p>
     </mat-card>
 </div>
