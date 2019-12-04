@@ -1,0 +1,28 @@
+<div style="padding: 20px; height: 100%;" fxLayout='column' fxLayoutAlign="center center" dir="ltr">
+    <mat-card style="text-align: center;">
+        <div class="bismillah">&#xfb51;&#xfb52;&#xfb53;</div>
+        <br>
+        <mat-form-field>
+            <mat-select [(ngModel)]="isPerAyat" required>
+                <mat-option value="menghafal">menghafal</mat-option>
+                <mat-option value="murojaah">murojaah</mat-option>
+            </mat-select>
+            <mat-label>
+                <mat-icon>favorite</mat-icon> <b> Saya ingin</b>
+            </mat-label>
+        </mat-form-field><br>
+
+        <mat-form-field>
+            <mat-select [(ngModel)]="startPage" required>
+                <mat-option *ngFor="let page of halaman" [value]="page">{{ page }}</mat-option>
+            </mat-select>
+            <mat-label>
+                <b>Mulai dari halaman</b>
+            </mat-label>
+            <mat-hint><span style="color: red;">*data yang tersedia baru dari Juz 29-30</span></mat-hint>
+        </mat-form-field><br><br><br><br>
+
+        <button mat-stroked-button aria-label="MULAI" (click)="start()">MULAI</button><br><br>
+        <p style="font-size: xx-small; text-align: right; width: 100%;">Info : <a href="https://api.whatsapp.com/send?phone=6281515888872">081515888872</a></p>
+    </mat-card>
+</div>

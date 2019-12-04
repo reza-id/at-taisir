@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable, Subscription } from 'rxjs';
 import { Ayat } from './ayat/ayat.model';
 import { Word } from './ayat/word/word.model';
 declare let FontFace: any;
@@ -9,10 +10,12 @@ declare let FontFace: any;
   templateUrl: './page.component.html',
   styleUrls: ['./page.component.scss']
 })
-export class PageComponent implements OnInit, OnChanges {
+export class PageComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() page;
   @Input() isOpenPerAyat;
+  @Input() rehideEvent: Observable<void>;
+  private eventsSubscription: Subscription;
   pageNumber: string;
   listAyat: Ayat[] = [];
 
@@ -20,6 +23,7 @@ export class PageComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.loadPage();
+    this.eventsSubscription = this.rehideEvent.subscribe(() => this.rehideAyat());
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -101,6 +105,16 @@ export class PageComponent implements OnInit, OnChanges {
         console.log(error);
       });
     } 
+  }
+
+  rehideAyat() {
+    this.listAyat.forEach(ayat => {
+      ayat.words.forEach(word => word.isHidden = true);
+    });
+  }
+  
+  ngOnDestroy() {
+    this.eventsSubscription.unsubscribe();
   }
 
 }

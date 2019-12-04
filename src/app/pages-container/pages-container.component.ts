@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-pages-container',
@@ -9,6 +10,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 export class PagesContainerComponent implements OnInit {
 
   @Input() isOpenPerAyat = true;
+  rehideSubject: Subject<void> = new Subject<void>();
 
   page: number;
   isOdd: boolean;
@@ -20,7 +22,7 @@ export class PagesContainerComponent implements OnInit {
 
   ngOnInit() {
     this.page = +this.route.snapshot.params['page'];
-    this.isOpenPerAyat = this.route.snapshot.queryParams['per-ayat'];
+    this.isOpenPerAyat = this.route.snapshot.queryParams['per-ayat'] == 'true';
     this.reloadPage();
 
     this.route.params
@@ -32,7 +34,7 @@ export class PagesContainerComponent implements OnInit {
       );
       this.route.queryParams.subscribe(
         (params: Params) => {
-          this.isOpenPerAyat = params['per-ayat'];
+          this.isOpenPerAyat = params['per-ayat'] == 'true';
         }
       );
   }
@@ -54,6 +56,10 @@ export class PagesContainerComponent implements OnInit {
 
   prevPage() {
     this.router.navigate([this.kanan-1], { queryParamsHandling: "merge"});
+  }
+
+  rehide() {
+    this.rehideSubject.next();
   }
 
 }
