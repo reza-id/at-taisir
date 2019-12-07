@@ -2,12 +2,13 @@
     <button [disabled]="kanan == 561" mat-stroked-button aria-label="Previous Page" (click)="prevPage()">
         <mat-icon>skip_next</mat-icon>
     </button>
-    <app-page [page]="kanan" [isOpenPerAyat]="isOpenPerAyat" [rehideEvent]="rehideSubject.asObservable()"></app-page>
-    <app-page [page]="kiri" [isOpenPerAyat]="isOpenPerAyat" [rehideEvent]="rehideSubject.asObservable()"></app-page>
-    <button [disabled]="kiri == 604"  mat-stroked-button aria-label="Next Page" (click)="nextPage()">
+    <app-page side="kanan" [rehideEvent]="rehideSubject.asObservable()"></app-page>
+    <app-page side="kiri" [rehideEvent]="rehideSubject.asObservable()"></app-page>
+    <button [disabled]="kiri == 604" mat-stroked-button aria-label="Next Page" (click)="nextPage()">
         <mat-icon>skip_previous</mat-icon>
     </button>
 </div>
-<button *ngIf="isOpenPerAyat" mat-stroked-button aria-label="refresh" (click)="rehide()" style="margin-right: 20px; margin-bottom: 20px;">
+<button *ngIf="isOpenPerAyat" mat-stroked-button aria-label="refresh" (click)="rehide()"
+    style="margin-right: 20px; margin-bottom: 20px;">
     <mat-icon>refresh</mat-icon>
 </button>

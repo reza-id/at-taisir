@@ -1,6 +1,8 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { DataService } from '../data.service';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -12,7 +14,7 @@ export class HomeComponent implements OnInit {
   isPerAyat: string;
   startPage: number;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private dataService: DataService) {
     for (let i = 562; i <= 640; i++) {
       this.halaman.push(i);
     }
@@ -23,7 +25,8 @@ export class HomeComponent implements OnInit {
 
   start() {
     if (this.isPerAyat && this.startPage) {
-      this.router.navigate([this.startPage], { queryParams: { 'per-ayat': this.isPerAyat == 'murojaah' } });
+      this.dataService.isOpenPerAyat = this.isPerAyat == 'murojaah';
+      this.router.navigate([this.startPage]);
     } else {
       alert('Harap sesuaikan pilihan Anda.');
     }

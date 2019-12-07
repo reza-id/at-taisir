@@ -1,3 +1,4 @@
 <mat-card class="page-card" [ngStyle]="{'font-family': pageNumber}">
     <app-ayat *ngFor="let ayat of listAyat" [ayat]="ayat" (ayatClick)="onAyatClick($event)"></app-ayat>
+    <div class="page-number">{{ page }}</div>
 </mat-card>

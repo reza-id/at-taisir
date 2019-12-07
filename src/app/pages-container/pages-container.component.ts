@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
+import { DataService } from '../data.service';
+
 @Component({
   selector: 'app-pages-container',
   templateUrl: './pages-container.component.html',
@@ -9,8 +11,9 @@ import { Subject } from 'rxjs';
 })
 export class PagesContainerComponent implements OnInit {
 
-  @Input() isOpenPerAyat = true;
   rehideSubject: Subject<void> = new Subject<void>();
+
+  isOpenPerAyat = true;
 
   page: number;
   isOdd: boolean;
@@ -18,23 +21,16 @@ export class PagesContainerComponent implements OnInit {
   kiri: number;
   kanan: number;
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute, private dataService: DataService) { }
 
   ngOnInit() {
-    this.page = +this.route.snapshot.params['page'];
-    this.isOpenPerAyat = this.route.snapshot.queryParams['per-ayat'] == 'true';
-    this.reloadPage();
+    this.isOpenPerAyat = this.dataService.isOpenPerAyat;
 
     this.route.params
       .subscribe(
         (params: Params) => {
           this.page = +params['page'];
           this.reloadPage();
-        }
-      );
-      this.route.queryParams.subscribe(
-        (params: Params) => {
-          this.isOpenPerAyat = params['per-ayat'] == 'true';
         }
       );
   }
@@ -48,14 +44,16 @@ export class PagesContainerComponent implements OnInit {
       this.kiri = this.page;
       this.kanan = this.page - 1;
     }
+    this.dataService.loadPage(this.kanan);
+    this.dataService.loadPage(this.kiri);
   }
 
   nextPage() {
-    this.router.navigate([this.kiri+1], { queryParamsHandling: "merge" });
+    this.router.navigate([this.kiri + 1], { queryParamsHandling: "merge" });
   }
 
   prevPage() {
-    this.router.navigate([this.kanan-1], { queryParamsHandling: "merge"});
+    this.router.navigate([this.kanan - 1], { queryParamsHandling: "merge" });
   }
 
   rehide() {
