@@ -4,7 +4,14 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @font-face {
-    font-family: bismillahFont;
-    src: url('assets/BSML.woff') format('woff');
-  }
-  .bismillah { font-family: bismillahFont; text-align: center; font-size: 1.5rem; line-height: 165%;}
+  font-family: bismillahFont;
+  src: url('assets/BSML.woff') format('woff');
+}
+
+@media screen and (max-width: 599px) {
+  .bismillah { font-family: bismillahFont; text-align: center; font-size: 5.6vw; line-height: 170%;}
+}
+
+@media screen and(min-width: 600px) {
+  .bismillah { font-family: bismillahFont; text-align: center; font-size: 1.5rem; line-height: 170%;}
+}

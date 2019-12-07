@@ -11,7 +11,6 @@ export class HomeComponent implements OnInit {
   halaman: number[] = [];
   isPerAyat: string;
   startPage: number;
-  screenWidth: number;
 
   constructor(private router: Router) {
     for (let i = 562; i <= 640; i++) {
@@ -20,12 +19,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.screenWidth = window.innerWidth;
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.screenWidth = window.innerWidth;
   }
 
   start() {

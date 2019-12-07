@@ -1,3 +1,11 @@
-.page-card {
-    margin: 0px 3px 10px; text-align: justify;font-size: 1.75rem;line-height: 140%;
+@media screen and (max-width: 599px) {
+    .page-card {
+        margin: 0px 3px 10px; text-align: center;font-size: 6.3vw;line-height: 140%;
+    }
+}
+
+@media screen and(min-width: 600px) {
+    .page-card {
+        margin: 0px 3px 10px; text-align: center; font-size: 1.85rem;line-height: 140%;
+    }
 }
