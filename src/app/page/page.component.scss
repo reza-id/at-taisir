@@ -1,11 +1,39 @@
 @media screen and (max-width: 599px) {
     .page-card {
-        margin: 0px 3px 10px; text-align: center;font-size: 6.3vw;line-height: 140%;
+        margin: 0px 3px 10px; 
+        text-align: center;
+        font-size: 6.3vw;
+        line-height: 140%;
+        min-width: 120px;        
+        min-height: 120px;
     }
 }
 
 @media screen and(min-width: 600px) {
     .page-card {
-        margin: 0px 3px 10px; text-align: center; font-size: 1.85rem;line-height: 140%;
+        margin: 0px 3px 10px;
+        text-align: center;
+        font-size: 1.85rem;
+        line-height: 140%;
+        min-width: 120px;       
+        min-height: 120px;
     }
 }
+
+.centerized {
+    position: absolute;
+    left: calc(50% - 50px);
+    top: calc(50% - 50px);
+}
+
+.error-msg {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: small;
+    width: 100px;
+    min-height: 100px;
+    padding: 20px;
+    vertical-align: middle;
+    line-height: normal;
+    background-color: white;
+    color: red;
+  }

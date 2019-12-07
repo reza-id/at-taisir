@@ -1,4 +1,6 @@
-<mat-card class="page-card" [ngStyle]="{'font-family': pageNumber}">
+<mat-card class="page-card" [class.hidden]="isLoading || isError" [ngStyle]="{'font-family': pageNumber}">
     <app-ayat *ngFor="let ayat of listAyat" [ayat]="ayat" (ayatClick)="onAyatClick($event)"></app-ayat>
     <div class="page-number">{{ page }}</div>
+    <mat-spinner *ngIf="isLoading" class="centerized"></mat-spinner>
+    <span *ngIf="isError" class="centerized error-msg" dir="ltr">Error Loading Page</span>
 </mat-card>

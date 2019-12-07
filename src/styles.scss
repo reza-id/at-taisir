@@ -17,3 +17,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .page-number { font-family: 'Courier New', Courier, monospace; font-size: small;}
+
+.word:hover {
+  color: #2ca4ab;
+}
+.hidden, .hidden:hover {
+  color: transparent;
+}

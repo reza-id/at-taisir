@@ -8,6 +8,7 @@ import {
     MatSidenavModule,
     MatSelectModule,
     MatCardModule,
+    MatProgressSpinnerModule,
     MatTooltipModule
 } from '@angular/material';
 
@@ -19,6 +20,7 @@ import {
         MatSidenavModule,
         MatSelectModule,
         MatCardModule,
+        MatProgressSpinnerModule,
         MatTooltipModule
     ],
     exports: [
@@ -28,6 +30,7 @@ import {
         MatSidenavModule,
         MatSelectModule,
         MatCardModule,
+        MatProgressSpinnerModule,
         MatTooltipModule
     ]
 })

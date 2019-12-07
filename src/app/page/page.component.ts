@@ -15,9 +15,14 @@ export class PageComponent implements OnInit, OnDestroy {
   page;
   @Input() side;
   @Input() rehideEvent: Observable<void>;
+  
+  isLoading = false;
+  isError = false;
 
   private eventsSubscription: Subscription;
   private pageSubscription: Subscription;
+  private pageLoadingSubscription: Subscription;  
+  private pageErrorSubscription: Subscription;
 
   pageNumber: string;
   listAyat: Ayat[] = [];
@@ -27,12 +32,17 @@ export class PageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.eventsSubscription = this.rehideEvent.subscribe(() => this.rehideAyat());
     const subject = (this.side == 'kiri') ? this.dataService.leftPageChanged : this.dataService.rightPageChanged;
-    console.log(this.side);
     this.pageSubscription = subject.subscribe(n => {
       this.page = n;
       this.listAyat = this.dataService.getPageContent(n);
       this.pageNumber = `page${n}`;
     });
+
+    const loadingSubject = (this.side == 'kiri') ? this.dataService.leftPageLoading : this.dataService.rightPageLoading;
+    this.pageLoadingSubscription = loadingSubject.subscribe(b => this.isLoading = b);
+
+    const errorSubject = (this.side == 'kiri') ? this.dataService.leftPageError : this.dataService.rightPageError;
+    this.pageErrorSubscription = errorSubject.subscribe(b => this.isError = b);
   }
 
   onAyatClick(word: Word) {
@@ -53,6 +63,8 @@ export class PageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.eventsSubscription.unsubscribe();
     this.pageSubscription.unsubscribe();
+    this.pageLoadingSubscription.unsubscribe();    
+    this.pageErrorSubscription.unsubscribe();
   }
 
 }

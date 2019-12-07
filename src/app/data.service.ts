@@ -15,6 +15,11 @@ export class DataService {
     isOpenPerAyat: boolean = false;
     leftPageChanged = new BehaviorSubject<number>(0);
     rightPageChanged = new BehaviorSubject<number>(0);
+    leftPageLoading = new BehaviorSubject<boolean>(true);
+    rightPageLoading = new BehaviorSubject<boolean>(true);
+    
+    leftPageError = new BehaviorSubject<boolean>(false);
+    rightPageError = new BehaviorSubject<boolean>(false);
 
     constructor(private http: HttpClient) { }
 
@@ -29,9 +34,13 @@ export class DataService {
 
     loadPage(page: number) {
         this.loadFont(page);
+        
+        this.showLoading(page);
 
         if (this.listPage[page]) {
-            this.publishPageContent(page);
+            this.publishPageContent(page);            
+            this.hideLoading(page);
+            this.hideError(page);
         } else {
             this.http.get<Ayat[]>(`https://reza-id.herokuapp.com/ayat/${page}`)
                 .subscribe(data => {
@@ -65,10 +74,18 @@ export class DataService {
                     if (data.length > 0) {
                         this.listPage[data[0].page_number] = listAyat;
                         this.publishPageContent(data[0].page_number);
+                        this.hideLoading(data[0].page_number);
+                        this.hideError(data[0].page_number);
                     }
 
                 }, error => {
-                    console.log(error);
+                    if (error['url']) {
+                        const pageError = error['url'].match( /\d+/g );
+                        if (pageError) {
+                            this.showError(pageError);
+                            this.hideLoading(pageError);
+                        }
+                    }
                 });
         }
     }
@@ -78,6 +95,38 @@ export class DataService {
             this.rightPageChanged.next(page);
         } else {
             this.leftPageChanged.next(page);
+        }
+    }
+
+    private showLoading(page: number) {
+        if (page % 2 != 0) {
+            this.rightPageLoading.next(true);
+        } else {
+            this.leftPageLoading.next(true);
+        }
+    }
+
+    private hideLoading(page: number) {
+        if (page % 2 != 0) {
+            this.rightPageLoading.next(false);
+        } else {
+            this.leftPageLoading.next(false);
+        }
+    }    
+
+    private showError(page: number) {
+        if (page % 2 != 0) {
+            this.rightPageError.next(true);
+        } else {
+            this.leftPageError.next(true);
+        }
+    }
+
+    private hideError(page: number) {
+        if (page % 2 != 0) {
+            this.rightPageError.next(false);
+        } else {
+            this.leftPageError.next(false);
         }
     }
 
