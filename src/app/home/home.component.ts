@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   start() {
     if (this.isPerAyat && this.startPage) {
       this.dataService.isOpenPerAyat = this.isPerAyat == 'murojaah';
-      this.router.navigate([this.startPage]);
+      this.router.navigate([this.startPage], { replaceUrl: true });
     } else {
       alert('Harap sesuaikan pilihan Anda.');
     }

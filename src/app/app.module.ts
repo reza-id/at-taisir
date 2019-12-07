@@ -13,6 +13,8 @@ import { AyatComponent } from './page/ayat/ayat.component';
 import { WordComponent } from './page/ayat/word/word.component';
 import { PagesContainerComponent } from './pages-container/pages-container.component';
 import { HomeComponent } from './home/home.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { HomeComponent } from './home/home.component';
     MaterialModule,
     FormsModule,
     FlexLayoutModule,
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

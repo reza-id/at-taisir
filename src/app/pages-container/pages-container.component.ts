@@ -49,11 +49,11 @@ export class PagesContainerComponent implements OnInit {
   }
 
   nextPage() {
-    this.router.navigate([this.kiri + 1], { queryParamsHandling: "merge" });
+    this.router.navigate([this.kiri + 1], { queryParamsHandling: "merge", replaceUrl: true });
   }
 
   prevPage() {
-    this.router.navigate([this.kanan - 1], { queryParamsHandling: "merge" });
+    this.router.navigate([this.kanan - 1], { queryParamsHandling: "merge", replaceUrl: true });
   }
 
   rehide() {
