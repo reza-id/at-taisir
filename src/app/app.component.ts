@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { DataService } from './data.service';
+import { Router } from '@angular/router';
 
 declare let FontFace: any;
 
@@ -17,7 +19,7 @@ export interface Food {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   foods: Food[] = [
     {value: 'steak-0', viewValue: 'Steak'},
     {value: 'pizza-1', viewValue: 'Pizza'},
@@ -47,4 +49,13 @@ export class AppComponent {
       updated: new Date('1/18/16'),
     }
   ];
+
+  constructor(private dataService: DataService, private router: Router) {}
+
+  ngOnInit() {
+    const startupState = this.dataService.getStartupState();
+    if (startupState) {
+      this.router.navigate([startupState.lastPageOpened]);
+    }
+  }
 }

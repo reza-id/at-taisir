@@ -1,8 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { DataService } from '../data.service';
+
+export enum KEY_CODE {
+  RIGHT_ARROW = 39,
+  LEFT_ARROW = 37,
+  UP_ARROW = 38
+}
 
 @Component({
   selector: 'app-pages-container',
@@ -48,6 +54,21 @@ export class PagesContainerComponent implements OnInit {
     this.dataService.loadPage(this.kiri);
   }
 
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.keyCode === KEY_CODE.RIGHT_ARROW) {
+      this.dataService.restartWordFocus();
+    }
+
+    if (event.keyCode === KEY_CODE.LEFT_ARROW) {
+      this.openNextHidden();
+    }
+
+    if (event.keyCode === KEY_CODE.UP_ARROW) {
+      this.rehide();
+    }
+  }
+
   nextPage() {
     this.router.navigate([this.kiri + 1], { queryParamsHandling: "merge", replaceUrl: true });
   }
@@ -60,4 +81,11 @@ export class PagesContainerComponent implements OnInit {
     this.rehideSubject.next();
   }
 
+  restartFocus() {
+    this.dataService.restartWordFocus();
+  }
+
+  openNextHidden() {
+    this.dataService.focusNextWord();
+  }
 }

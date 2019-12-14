@@ -25,6 +25,7 @@
     "@angular/router": "~8.2.11",
     "@angular/service-worker": "~8.2.11",
     "hammerjs": "^2.0.8",
+    "ngx-webstorage-service": "^4.1.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

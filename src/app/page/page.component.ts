@@ -46,6 +46,7 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   onAyatClick(word: Word) {
+    this.dataService.setFistWordFocus(word.id);
     if (this.dataService.isOpenPerAyat) {
       this.listAyat.find(i => i.verse_key == word.verse_key)
         .words.forEach(w => {

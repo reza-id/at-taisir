@@ -1,5 +1,8 @@
-import { Component, OnInit, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { Word } from './word.model';
+import { MatTooltip } from '@angular/material';
+import { DataService } from 'src/app/data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-word',
@@ -9,14 +12,18 @@ import { Word } from './word.model';
   // `tooltip-custom-class-example.css` will not be scoped to this component's view.
   encapsulation: ViewEncapsulation.None,
 })
-export class WordComponent implements OnInit {
+export class WordComponent implements OnInit, OnDestroy {
 
   @Input() word: Word
   @Output() wordClick = new EventEmitter<Word>();
   translation = '';
   tooltipclass = 'tooltip-normal';
 
-  constructor() { }
+  unhideSubs: Subscription;
+
+  @ViewChild(MatTooltip, {static: true}) tooltip: MatTooltip;
+
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
     if (this.word.translation) {
@@ -24,10 +31,22 @@ export class WordComponent implements OnInit {
     }
 
     if (this.word.isAyatNumber) this.tooltipclass = 'tooltip-red';
+    this.unhideSubs = this.dataService.wordFocusSubject.subscribe(n => {
+      if (n == this.word.id) {
+        this.tooltip.show();
+        this.word.isHidden = false;
+      } else {
+        this.tooltip.hide();
+      }
+    });
   }
 
   onWordClick() {
     this.wordClick.emit(this.word);
+  }
+
+  ngOnDestroy() {
+
   }
 
 }

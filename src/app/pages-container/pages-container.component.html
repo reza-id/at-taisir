@@ -12,3 +12,11 @@
     style="margin-right: 20px; margin-bottom: 20px;">
     <mat-icon>refresh</mat-icon>
 </button>
+<div *ngIf="isOpenPerAyat" fxShow.gt-sm="false" class="mobile-next-word">
+    <button mat-stroked-button aria-label="restart" (click)="restartFocus()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+    <button mat-stroked-button aria-label="next" (click)="openNextHidden()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+</div>

@@ -1,10 +1,13 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 import { Ayat } from './page/ayat/ayat.model';
 
 declare let FontFace: any;
+
+export class StartupState { isOpenPerAyat: boolean; lastPageOpened: number; firstWordFocus: number; currentWordFocus: number; }
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
@@ -17,28 +20,88 @@ export class DataService {
     rightPageChanged = new BehaviorSubject<number>(0);
     leftPageLoading = new BehaviorSubject<boolean>(true);
     rightPageLoading = new BehaviorSubject<boolean>(true);
-    
+
     leftPageError = new BehaviorSubject<boolean>(false);
     rightPageError = new BehaviorSubject<boolean>(false);
 
-    constructor(private http: HttpClient) { }
+    private firstWordFocus = 0;
+    private currentWordId = 0;
+    wordFocusSubject = new BehaviorSubject<number>(0);
+
+    constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService) { }
 
     getPageContent(page: number): Ayat[] {
         if (page == 0) return [];
 
+        let cur = 1;
+        if (page % 2 == 0) cur += 1000;
         return this.listPage[page].map(listAyat => {
-            listAyat.words.forEach(word => word.isHidden = this.isOpenPerAyat);
+            listAyat.words.forEach(word => {
+                word.isHidden = this.isOpenPerAyat
+                word.id = cur;
+                cur++;
+            });
             return listAyat;
         });
     }
 
+    private currentStartupState: StartupState = null
+
+    setStartupState(isOpenPerAyat?: boolean, lastPageOpened?: number, firstWordFocus?: number, currentWordFocus?: number) {
+        if (this.currentStartupState != null) {
+            if (isOpenPerAyat) this.currentStartupState.isOpenPerAyat = isOpenPerAyat;
+            if (lastPageOpened) this.currentStartupState.lastPageOpened = lastPageOpened;
+            if (firstWordFocus) this.currentStartupState.firstWordFocus = firstWordFocus;
+            if (currentWordFocus) this.currentStartupState.currentWordFocus = currentWordFocus;
+        } else {
+            this.currentStartupState = {
+                isOpenPerAyat,
+                lastPageOpened,
+                firstWordFocus,
+                currentWordFocus
+            }
+        }
+        this.storage.set('startupState', this.currentStartupState);
+    }
+
+    getStartupState(): StartupState {
+        const startupState: StartupState = this.storage.get('startupState');
+        if (startupState != null) {
+            this.currentStartupState = startupState;
+
+            this.isOpenPerAyat = startupState.isOpenPerAyat;
+            this.firstWordFocus = startupState.firstWordFocus;
+            this.currentWordId = startupState.currentWordFocus;
+
+            this.wordFocusSubject.next(this.currentWordId);
+        }
+
+        return startupState;
+    }
+
+    setFistWordFocus(id: number) {
+        this.firstWordFocus = id;
+        this.setStartupState(undefined, undefined, id, id);
+        this.restartWordFocus();
+    }
+
+    focusNextWord() {
+        this.currentWordId++;
+        this.wordFocusSubject.next(this.currentWordId);
+    }
+
+    restartWordFocus() {
+        this.currentWordId = this.firstWordFocus;
+        this.wordFocusSubject.next(this.currentWordId);
+    }
+
     loadPage(page: number) {
         this.loadFont(page);
-        
+
         this.showLoading(page);
 
         if (this.listPage[page]) {
-            this.publishPageContent(page);            
+            this.publishPageContent(page);
             this.hideLoading(page);
             this.hideError(page);
         } else {
@@ -80,7 +143,7 @@ export class DataService {
 
                 }, error => {
                     if (error['url']) {
-                        const pageError = error['url'].match( /\d+/g );
+                        const pageError = error['url'].match(/\d+/g);
                         if (pageError) {
                             this.showError(pageError);
                             this.hideLoading(pageError);
@@ -112,7 +175,7 @@ export class DataService {
         } else {
             this.leftPageLoading.next(false);
         }
-    }    
+    }
 
     private showError(page: number) {
         if (page % 2 != 0) {
