@@ -86,6 +86,11 @@ export class PagesContainerComponent implements OnInit {
   }
 
   openNextHidden() {
-    this.dataService.focusNextWord();
+    const shouldOpenNextPage = this.dataService.focusNextWord();
+    if (shouldOpenNextPage) {
+      this.nextPage();
+      this.dataService.setFistWordFocus(1);
+      this.dataService.setStartupState(this.dataService.isOpenPerAyat, this.kanan, 1, 1);
+    }
   }
 }

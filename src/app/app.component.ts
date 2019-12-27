@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { DataService } from './data.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 declare let FontFace: any;
+declare let gtag: Function;
 
 export interface Section {
   name: string;
@@ -21,9 +22,9 @@ export interface Food {
 })
 export class AppComponent implements OnInit {
   foods: Food[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'}
+    { value: 'steak-0', viewValue: 'Steak' },
+    { value: 'pizza-1', viewValue: 'Pizza' },
+    { value: 'tacos-2', viewValue: 'Tacos' }
   ];
   folders: Section[] = [
     {
@@ -50,7 +51,17 @@ export class AppComponent implements OnInit {
     }
   ];
 
-  constructor(private dataService: DataService, private router: Router) {}
+  constructor(private dataService: DataService, public router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        gtag('config', 'UA-155053975-1',
+          {
+            'page_path': event.urlAfterRedirects
+          }
+        );
+      }
+    })
+  }
 
   ngOnInit() {
     const startupState = this.dataService.getStartupState();

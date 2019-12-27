@@ -1,7 +1,13 @@
 .mobile-next-word {
     top: auto !important;
-    right: auto !important;
+    right: 10px !important;
     bottom: 10px !important;
-    left: 10px !important;
+    left: auto !important;
     position: fixed !important;
+}
+
+.rehide-word {
+    left: 10px !important;
+    margin-bottom: 10px !important;
+    position: absolute !important;
 }

@@ -46,7 +46,7 @@ export class WordComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
+    this.unhideSubs.unsubscribe();
   }
 
 }

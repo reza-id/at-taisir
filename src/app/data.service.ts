@@ -1,6 +1,6 @@
 import { Injectable, Inject } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, VirtualTimeScheduler } from 'rxjs';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 import { Ayat } from './page/ayat/ayat.model';
@@ -26,6 +26,8 @@ export class DataService {
 
     private firstWordFocus = 0;
     private currentWordId = 0;
+    private maxLeftId = 0;
+    private maxRightId = 1000;
     wordFocusSubject = new BehaviorSubject<number>(0);
 
     constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService) { }
@@ -33,12 +35,19 @@ export class DataService {
     getPageContent(page: number): Ayat[] {
         if (page == 0) return [];
 
+        const isLeftPage = page % 2 == 0;
+
         let cur = 1;
-        if (page % 2 == 0) cur += 1000;
+        if (isLeftPage) cur += 1000;
         return this.listPage[page].map(listAyat => {
             listAyat.words.forEach(word => {
                 word.isHidden = this.isOpenPerAyat
                 word.id = cur;
+                if (isLeftPage) {
+                    this.maxLeftId = cur;
+                } else {
+                    this.maxRightId = cur;
+                }
                 cur++;
             });
             return listAyat;
@@ -85,9 +94,14 @@ export class DataService {
         this.restartWordFocus();
     }
 
-    focusNextWord() {
+    focusNextWord(): boolean {
+        if (this.currentWordId == this.maxRightId) {
+            this.currentWordId = 1000;
+        }
         this.currentWordId++;
         this.wordFocusSubject.next(this.currentWordId);
+
+        return this.currentWordId > this.maxLeftId;
     }
 
     restartWordFocus() {
