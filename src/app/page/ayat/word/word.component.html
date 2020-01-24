@@ -2,6 +2,7 @@
 <span dir="ltr"
     (click)="onWordClick()"
     class="word"
+    [class.word-focus]="isHighlight"
     [class.hidden]="word.isHidden"
     [matTooltip]="translation"
     [matTooltipClass]="tooltipclass"

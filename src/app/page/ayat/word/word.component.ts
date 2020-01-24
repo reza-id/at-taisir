@@ -18,6 +18,7 @@ export class WordComponent implements OnInit, OnDestroy {
   @Output() wordClick = new EventEmitter<Word>();
   translation = '';
   tooltipclass = 'tooltip-normal';
+  isHighlight = false;
 
   unhideSubs: Subscription;
 
@@ -32,11 +33,17 @@ export class WordComponent implements OnInit, OnDestroy {
 
     if (this.word.isAyatNumber) this.tooltipclass = 'tooltip-red';
     this.unhideSubs = this.dataService.wordFocusSubject.subscribe(n => {
-      if (n == this.word.id) {
-        this.tooltip.show();
+      // if (n == this.word.id) {
+      //   this.tooltip.show();
+      //   this.word.isHidden = false;
+      // } else {
+      //   this.tooltip.hide();
+      // }
+      if (n == this.word.ayatInpageIndex) {
         this.word.isHidden = false;
+        this.isHighlight = true;
       } else {
-        this.tooltip.hide();
+        this.isHighlight = false;
       }
     });
   }

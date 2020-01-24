@@ -21,6 +21,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .word:hover {
   color: #2ca4ab;
 }
+.word-focus {
+  color: #2ca4ab;
+}
 .hidden, .hidden:hover {
   color: transparent;
 }

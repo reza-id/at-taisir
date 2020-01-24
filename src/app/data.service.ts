@@ -37,19 +37,25 @@ export class DataService {
 
         const isLeftPage = page % 2 == 0;
 
-        let cur = 1;
-        if (isLeftPage) cur += 1000;
+        let curWord = 1;
+        let curAyat = 1;
+        if (isLeftPage) {
+            curWord += 1000;
+            curAyat += 1000;
+        }
         return this.listPage[page].map(listAyat => {
             listAyat.words.forEach(word => {
                 word.isHidden = this.isOpenPerAyat
-                word.id = cur;
+                word.id = curWord;
+                word.ayatInpageIndex = curAyat;
                 if (isLeftPage) {
-                    this.maxLeftId = cur;
+                    this.maxLeftId = curWord;
                 } else {
-                    this.maxRightId = cur;
+                    this.maxRightId = curWord;
                 }
-                cur++;
+                curWord++;
             });
+            curAyat++;
             return listAyat;
         });
     }
