@@ -19,7 +19,7 @@ export class PagesContainerComponent implements OnInit {
 
   rehideSubject: Subject<void> = new Subject<void>();
 
-  isOpenPerAyat = true;
+  isItemHidden = true;
 
   page: number;
   isOdd: boolean;
@@ -30,7 +30,7 @@ export class PagesContainerComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private dataService: DataService) { }
 
   ngOnInit() {
-    this.isOpenPerAyat = this.dataService.isOpenPerAyat;
+    this.isItemHidden = this.dataService.isItemHidden;
 
     this.route.params
       .subscribe(
@@ -57,7 +57,7 @@ export class PagesContainerComponent implements OnInit {
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.keyCode === KEY_CODE.RIGHT_ARROW) {
-      this.dataService.restartWordFocus();
+      this.dataService.restartItemFocus();
     }
 
     if (event.keyCode === KEY_CODE.LEFT_ARROW) {
@@ -82,15 +82,15 @@ export class PagesContainerComponent implements OnInit {
   }
 
   restartFocus() {
-    this.dataService.restartWordFocus();
+    this.dataService.restartItemFocus();
   }
 
   openNextHidden() {
-    const shouldOpenNextPage = this.dataService.focusNextWord();
+    const shouldOpenNextPage = this.dataService.focusNextItem();
     if (shouldOpenNextPage) {
       this.nextPage();
-      this.dataService.setFistWordFocus(1);
-      this.dataService.setStartupState(this.dataService.isOpenPerAyat, this.kanan, 1, 1);
+      this.dataService.setFirstItemFocus(0, 0);
+      this.dataService.setStartupState(this.dataService.isItemHidden, this.kanan, 0, 0);
     }
   }
 }

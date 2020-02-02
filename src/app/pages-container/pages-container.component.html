@@ -8,11 +8,11 @@
         <mat-icon>skip_previous</mat-icon>
     </button>
 </div>
-<button *ngIf="isOpenPerAyat" mat-stroked-button aria-label="refresh" (click)="rehide()"
+<button *ngIf="isItemHidden" mat-stroked-button aria-label="refresh" (click)="rehide()"
     class="rehide-word">
     <mat-icon>refresh</mat-icon>
 </button>
-<div *ngIf="isOpenPerAyat" fxShow.gt-sm="false" class="mobile-next-word">
+<div *ngIf="isItemHidden" fxShow.gt-sm="false" class="mobile-next-word">
     <button mat-stroked-button aria-label="restart" (click)="restartFocus()">
         <mat-icon>keyboard_arrow_right</mat-icon>
     </button>

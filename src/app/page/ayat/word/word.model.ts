@@ -2,7 +2,8 @@ import { WordTranslation } from './word-translation.model';
 
 export interface Word {
     id: number;
-    ayatInpageIndex: number;
+    ayatPositionInPage: number;
+    wordPositionInPage: number;
     isNewLine: boolean;
     isHidden: boolean;
     isAyatNumber: boolean;

@@ -7,7 +7,7 @@ import { Ayat } from './page/ayat/ayat.model';
 
 declare let FontFace: any;
 
-export class StartupState { isOpenPerAyat: boolean; lastPageOpened: number; firstWordFocus: number; currentWordFocus: number; }
+export class StartupState { isItemHidden: boolean; lastPageOpened: number; firstItemFocus: number; currentItemFocus: number; openMode: string; }
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
@@ -15,7 +15,8 @@ export class DataService {
     private listPage: Ayat[][] = [];
     private loadedFont = [];
 
-    isOpenPerAyat: boolean = false;
+    isItemHidden: boolean = false;
+    openMode: String = 'word';
     leftPageChanged = new BehaviorSubject<number>(0);
     rightPageChanged = new BehaviorSubject<number>(0);
     leftPageLoading = new BehaviorSubject<boolean>(true);
@@ -24,11 +25,11 @@ export class DataService {
     leftPageError = new BehaviorSubject<boolean>(false);
     rightPageError = new BehaviorSubject<boolean>(false);
 
-    private firstWordFocus = 0;
-    private currentWordId = 0;
-    private maxLeftId = 0;
-    private maxRightId = 1000;
-    wordFocusSubject = new BehaviorSubject<number>(0);
+    private firstItemFocus = 0;
+    private currentFocusItemIndex = 0;
+    private maxWordIndex = 0;
+    private maxAyatIndex = 0;
+    itemFocusSubject = new BehaviorSubject<number>(0);
 
     constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService) { }
 
@@ -36,44 +37,32 @@ export class DataService {
         if (page == 0) return [];
 
         const isLeftPage = page % 2 == 0;
-
-        let curWord = 1;
-        let curAyat = 1;
-        if (isLeftPage) {
-            curWord += 1000;
-            curAyat += 1000;
-        }
         return this.listPage[page].map(listAyat => {
             listAyat.words.forEach(word => {
-                word.isHidden = this.isOpenPerAyat
-                word.id = curWord;
-                word.ayatInpageIndex = curAyat;
-                if (isLeftPage) {
-                    this.maxLeftId = curWord;
-                } else {
-                    this.maxRightId = curWord;
-                }
-                curWord++;
+                word.isHidden = this.isItemHidden
+                this.maxWordIndex = word.wordPositionInPage
+                this.maxAyatIndex = word.ayatPositionInPage
             });
-            curAyat++;
             return listAyat;
         });
     }
 
     private currentStartupState: StartupState = null
 
-    setStartupState(isOpenPerAyat?: boolean, lastPageOpened?: number, firstWordFocus?: number, currentWordFocus?: number) {
+    setStartupState(isItemHidden?: boolean, lastPageOpened?: number, firstItemFocus?: number, currentItemFocus?: number, openMode?: string) {
         if (this.currentStartupState != null) {
-            if (isOpenPerAyat) this.currentStartupState.isOpenPerAyat = isOpenPerAyat;
+            if (isItemHidden) this.currentStartupState.isItemHidden = isItemHidden;
             if (lastPageOpened) this.currentStartupState.lastPageOpened = lastPageOpened;
-            if (firstWordFocus) this.currentStartupState.firstWordFocus = firstWordFocus;
-            if (currentWordFocus) this.currentStartupState.currentWordFocus = currentWordFocus;
+            if (firstItemFocus != null) this.currentStartupState.firstItemFocus = firstItemFocus;
+            if (currentItemFocus != null) this.currentStartupState.currentItemFocus = currentItemFocus;
+            if (openMode) this.currentStartupState.openMode = openMode;
         } else {
             this.currentStartupState = {
-                isOpenPerAyat,
+                isItemHidden,
                 lastPageOpened,
-                firstWordFocus,
-                currentWordFocus
+                firstItemFocus,
+                currentItemFocus,
+                openMode
             }
         }
         this.storage.set('startupState', this.currentStartupState);
@@ -84,35 +73,44 @@ export class DataService {
         if (startupState != null) {
             this.currentStartupState = startupState;
 
-            this.isOpenPerAyat = startupState.isOpenPerAyat;
-            this.firstWordFocus = startupState.firstWordFocus;
-            this.currentWordId = startupState.currentWordFocus;
+            this.isItemHidden = startupState.isItemHidden;
+            this.openMode = startupState.openMode;
+            this.firstItemFocus = startupState.firstItemFocus;
+            this.currentFocusItemIndex = startupState.currentItemFocus;
 
-            this.wordFocusSubject.next(this.currentWordId);
+            this.itemFocusSubject.next(this.currentFocusItemIndex);
         }
 
         return startupState;
     }
 
-    setFistWordFocus(id: number) {
-        this.firstWordFocus = id;
-        this.setStartupState(undefined, undefined, id, id);
-        this.restartWordFocus();
-    }
-
-    focusNextWord(): boolean {
-        if (this.currentWordId == this.maxRightId) {
-            this.currentWordId = 1000;
+    setFirstItemFocus(id: number, ayatIndex: number) {
+        if (this.openMode == 'word') {
+            this.firstItemFocus = id;
+            this.setStartupState(undefined, undefined, id, id);
+        } else {
+            this.firstItemFocus = ayatIndex;
+            this.setStartupState(undefined, undefined, ayatIndex, ayatIndex);
         }
-        this.currentWordId++;
-        this.wordFocusSubject.next(this.currentWordId);
 
-        return this.currentWordId > this.maxLeftId;
+        this.restartItemFocus();
     }
 
-    restartWordFocus() {
-        this.currentWordId = this.firstWordFocus;
-        this.wordFocusSubject.next(this.currentWordId);
+    focusNextItem(): boolean {
+        this.currentFocusItemIndex++;
+        this.itemFocusSubject.next(this.currentFocusItemIndex);
+
+        if (this.openMode == 'word') {
+            return this.currentFocusItemIndex > this.maxWordIndex;
+        } else {
+            return this.currentFocusItemIndex > this.maxAyatIndex;
+        }
+
+    }
+
+    restartItemFocus() {
+        this.currentFocusItemIndex = this.firstItemFocus;
+        this.itemFocusSubject.next(this.currentFocusItemIndex);
     }
 
     loadPage(page: number) {

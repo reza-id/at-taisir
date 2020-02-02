@@ -7,6 +7,7 @@ import {
     MatListModule,
     MatSidenavModule,
     MatSelectModule,
+    MatRadioModule,
     MatCardModule,
     MatProgressSpinnerModule,
     MatTooltipModule
@@ -19,6 +20,7 @@ import {
         MatListModule,
         MatSidenavModule,
         MatSelectModule,
+        MatRadioModule,
         MatCardModule,
         MatProgressSpinnerModule,
         MatTooltipModule
@@ -29,6 +31,7 @@ import {
         MatListModule,
         MatSidenavModule,
         MatSelectModule,
+        MatRadioModule,
         MatCardModule,
         MatProgressSpinnerModule,
         MatTooltipModule

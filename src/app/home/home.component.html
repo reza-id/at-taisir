@@ -3,7 +3,7 @@
         <div class="bismillah">&#xfb51;&#xfb52;&#xfb53;</div>
         <br>
         <mat-form-field>
-            <mat-select [(ngModel)]="isPerAyat" required>
+            <mat-select [(ngModel)]="isHidden" required>
                 <mat-option value="menghafal">menghafal</mat-option>
                 <mat-option value="murojaah">murojaah</mat-option>
             </mat-select>
@@ -11,6 +11,11 @@
                 <mat-icon>favorite</mat-icon> <b> Saya ingin</b>
             </mat-label>
         </mat-form-field><br>
+
+        <mat-radio-group aria-labelledby="open-mode" required [(ngModel)]="openMode">
+            <mat-radio-button value="word">&nbsp;Per-Kata </mat-radio-button>
+            <mat-radio-button value="ayat">&nbsp;Per-Ayat </mat-radio-button>
+        </mat-radio-group> <br><br>
 
         <mat-form-field>
             <mat-select [(ngModel)]="startPage" required>
@@ -23,6 +28,9 @@
         </mat-form-field><br><br><br><br>
 
         <button mat-stroked-button aria-label="MULAI" (click)="start()">MULAI</button><br><br>
-        <p style="font-size: xx-small; text-align: right; width: 100%;">Berikan Saran : <a href="https://api.whatsapp.com/send?phone=6281515888872">081515888872</a></p>
+        <p style="font-size: xx-small; text-align: right; width: 100%; vertical-align:middle;">Saran dan Kontribusi : <a
+                href="https://github.com/reza-id/at-taisir"><img
+                    src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                    style="width: 30px;height: 30px;"></a></p>
     </mat-card>
 </div>

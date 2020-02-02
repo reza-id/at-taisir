@@ -11,8 +11,9 @@ import { DataService } from '../data.service';
 export class HomeComponent implements OnInit {
 
   halaman: number[] = [];
-  isPerAyat: string;
+  isHidden: string;
   startPage: number;
+  openMode: string;
 
   constructor(private router: Router, private dataService: DataService) {
     for (let i = 562; i <= 640; i++) {
@@ -24,9 +25,10 @@ export class HomeComponent implements OnInit {
   }
 
   start() {
-    if (this.isPerAyat && this.startPage) {
-      this.dataService.isOpenPerAyat = this.isPerAyat == 'murojaah';
-      this.dataService.setStartupState(this.isPerAyat == 'murojaah', this.startPage, 0, 0);
+    if (this.isHidden && this.startPage && this.openMode) {
+      this.dataService.isItemHidden = this.isHidden == 'murojaah';
+      this.dataService.openMode = this.openMode;
+      this.dataService.setStartupState(this.isHidden == 'murojaah', this.startPage, 0, 0, this.openMode)
 
       this.router.navigate([this.startPage], { replaceUrl: true });
     } else {

@@ -22,7 +22,7 @@ export class WordComponent implements OnInit, OnDestroy {
 
   unhideSubs: Subscription;
 
-  @ViewChild(MatTooltip, {static: true}) tooltip: MatTooltip;
+  @ViewChild(MatTooltip, { static: true }) tooltip: MatTooltip;
 
   constructor(private dataService: DataService) { }
 
@@ -32,18 +32,25 @@ export class WordComponent implements OnInit, OnDestroy {
     }
 
     if (this.word.isAyatNumber) this.tooltipclass = 'tooltip-red';
-    this.unhideSubs = this.dataService.wordFocusSubject.subscribe(n => {
-      // if (n == this.word.id) {
-      //   this.tooltip.show();
-      //   this.word.isHidden = false;
-      // } else {
-      //   this.tooltip.hide();
-      // }
-      if (n == this.word.ayatInpageIndex) {
-        this.word.isHidden = false;
-        this.isHighlight = true;
+    this.unhideSubs = this.dataService.itemFocusSubject.subscribe(n => {
+      if (this.dataService.openMode == 'ayat') {
+        if (n == this.word.ayatPositionInPage) {
+          this.word.isHidden = false;
+          this.isHighlight = true;
+          if (this.word.isAyatNumber) this.tooltip.show();
+        } else {
+          this.isHighlight = false;
+          this.tooltip.hide();
+        }
       } else {
-        this.isHighlight = false;
+        if (n == this.word.wordPositionInPage) {
+          this.tooltip.show();
+          this.word.isHidden = false;
+          this.isHighlight = true;
+        } else {
+          this.isHighlight = false;
+          this.tooltip.hide();
+        }
       }
     });
   }
