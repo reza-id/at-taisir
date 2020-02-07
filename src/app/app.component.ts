@@ -1,8 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataService } from './data.service';
 import { Router, NavigationEnd } from '@angular/router';
 
-declare let FontFace: any;
 declare let gtag: Function;
 
 export interface Section {
@@ -65,8 +64,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     const startupState = this.dataService.getStartupState();
-    if (startupState) {
-      this.router.navigate([startupState.lastPageOpened]);
+    if (startupState.lastPageOpened && window.location.pathname.split("/")[1] != "notif") {
+      this.router.navigate([startupState.lastPageOpened], { queryParamsHandling: "merge", replaceUrl: true });
     }
   }
 }

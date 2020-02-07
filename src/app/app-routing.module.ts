@@ -7,6 +7,7 @@ import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'notif/:page/:position', component: PagesContainerComponent },
   { path: ':page', component: PagesContainerComponent },
 ];
 

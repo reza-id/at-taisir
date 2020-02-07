@@ -30,8 +30,12 @@ export class PagesContainerComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private dataService: DataService) { }
 
   ngOnInit() {
+    if (this.route.snapshot.url[0].path == 'notif') {
+      this.dataService.setFirstItemFocus(0, this.route.snapshot.params['position']);
+      this.dataService.openMode = 'ayat';
+      this.dataService.isItemHidden = true;
+    }
     this.isItemHidden = this.dataService.isItemHidden;
-
     this.route.params
       .subscribe(
         (params: Params) => {
@@ -70,10 +74,12 @@ export class PagesContainerComponent implements OnInit {
   }
 
   nextPage() {
+    this.dataService.setFirstItemFocus(0, 0);
     this.router.navigate([this.kiri + 1], { queryParamsHandling: "merge", replaceUrl: true });
   }
 
-  prevPage() {
+  prevPage() {    
+    this.dataService.setFirstItemFocus(0, 0);
     this.router.navigate([this.kanan - 1], { queryParamsHandling: "merge", replaceUrl: true });
   }
 
@@ -89,7 +95,6 @@ export class PagesContainerComponent implements OnInit {
     const shouldOpenNextPage = this.dataService.focusNextItem();
     if (shouldOpenNextPage) {
       this.nextPage();
-      this.dataService.setFirstItemFocus(0, 0);
       this.dataService.setStartupState(this.dataService.isItemHidden, this.kanan, 0, 0);
     }
   }

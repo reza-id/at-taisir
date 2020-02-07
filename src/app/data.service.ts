@@ -33,6 +33,14 @@ export class DataService {
 
     constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService) { }
 
+    getPageNumber(surah: number, ayat: number) {
+        return this.http.get<{
+            page_number: number,
+            wordPositionInPage: number,
+            ayatPositionInPage: number
+        }>(`https://reza-id.herokuapp.com/getpage/${surah}/${ayat}`).toPromise();
+    }
+
     getPageContent(page: number): Ayat[] {
         if (page == 0) return [];
 
@@ -84,13 +92,13 @@ export class DataService {
         return startupState;
     }
 
-    setFirstItemFocus(id: number, ayatIndex: number) {
+    setFirstItemFocus(wordIndex: number, ayatIndex: number, shouldSave: boolean = true) {
         if (this.openMode == 'word') {
-            this.firstItemFocus = id;
-            this.setStartupState(undefined, undefined, id, id);
+            this.firstItemFocus = wordIndex;
+            if (shouldSave) this.setStartupState(undefined, undefined, wordIndex, wordIndex);
         } else {
             this.firstItemFocus = ayatIndex;
-            this.setStartupState(undefined, undefined, ayatIndex, ayatIndex);
+            if (shouldSave) this.setStartupState(undefined, undefined, ayatIndex, ayatIndex);
         }
 
         this.restartItemFocus();

@@ -3,7 +3,7 @@
         <div class="bismillah">&#xfb51;&#xfb52;&#xfb53;</div>
         <br>
         <mat-form-field>
-            <mat-select [(ngModel)]="isHidden" required>
+            <mat-select [(ngModel)]="isHidden" (selectionChange)="checkReady()" required>
                 <mat-option value="menghafal">menghafal</mat-option>
                 <mat-option value="murojaah">murojaah</mat-option>
             </mat-select>
@@ -12,22 +12,33 @@
             </mat-label>
         </mat-form-field><br>
 
-        <mat-radio-group aria-labelledby="open-mode" required [(ngModel)]="openMode">
-            <mat-radio-button value="word">&nbsp;Per-Kata </mat-radio-button>
+        <mat-radio-group aria-labelledby="open-mode" required [(ngModel)]="openMode" (change)="checkReady()">
+            <mat-radio-button value="word">&nbsp;Per-Kata </mat-radio-button>&nbsp;
             <mat-radio-button value="ayat">&nbsp;Per-Ayat </mat-radio-button>
         </mat-radio-group> <br><br>
 
         <mat-form-field>
-            <mat-select [(ngModel)]="startPage" required>
-                <mat-option *ngFor="let page of halaman" [value]="page">{{ page }}</mat-option>
+            <mat-select [(ngModel)]="selectedSurah" (selectionChange)="onSurahSelected($event.value);checkReady();" required>
+                <mat-option *ngFor="let s of surahs; index as i" [value]="i+1">
+                {{i+1}}. {{ s.name }}
+                </mat-option>
             </mat-select>
             <mat-label>
-                <b>Mulai dari halaman</b>
+                <b>Surat</b>
             </mat-label>
             <mat-hint><span style="color: red;">*data yang tersedia baru dari Juz 29-30</span></mat-hint>
+        </mat-form-field>
+
+        <mat-form-field style="width: 70px;">
+            <mat-select [(ngModel)]="selectedAyat" (selectionChange)="checkReady()" required>
+                <mat-option *ngFor="let x of totalAyatForselected" [value]="x">{{ x }}</mat-option>
+            </mat-select>
+            <mat-label>
+                <b>Ayat</b>
+            </mat-label>
         </mat-form-field><br><br><br><br>
 
-        <button mat-stroked-button aria-label="MULAI" (click)="start()">MULAI</button><br><br>
+        <button mat-stroked-button aria-label="MULAI" (click)="start()" [disabled]="!isReady">MULAI</button><br><br>
         <p style="font-size: xx-small; text-align: right; width: 100%; vertical-align:middle;">Saran dan Kontribusi : <a
                 href="https://github.com/reza-id/at-taisir"><img
                     src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
