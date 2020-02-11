@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './data.service';
 import { Router, NavigationEnd } from '@angular/router';
+import { SwPush } from '@angular/service-worker';
 
 declare let gtag: Function;
 
@@ -50,7 +51,19 @@ export class AppComponent implements OnInit {
     }
   ];
 
-  constructor(private dataService: DataService, public router: Router) {
+  notifData;
+
+  constructor(private dataService: DataService, public router: Router, push: SwPush) {
+
+    push.messages.subscribe(notif => {            
+      this.notifData = notif['data'];
+    });
+    push.notificationClicks.subscribe(click => {
+      if (this.notifData) {
+        router.navigate([`notif/${this.notifData.page}/${this.notifData.index}`]);
+      }        
+    });
+
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         gtag('config', 'UA-155053975-1',

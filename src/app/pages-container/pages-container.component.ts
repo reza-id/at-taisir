@@ -22,6 +22,7 @@ export class PagesContainerComponent implements OnInit {
   isItemHidden = true;
 
   page: number;
+  position: number; // position for qlue from notification
   isOdd: boolean;
 
   kiri: number;
@@ -31,7 +32,7 @@ export class PagesContainerComponent implements OnInit {
 
   ngOnInit() {
     if (this.route.snapshot.url[0].path == 'notif') {
-      this.dataService.setFirstItemFocus(0, this.route.snapshot.params['position']);
+      this.dataService.setFirstItemFocus(0, this.route.snapshot.params['position'], false);
       this.dataService.openMode = 'ayat';
       this.dataService.isItemHidden = true;
     }
@@ -39,8 +40,19 @@ export class PagesContainerComponent implements OnInit {
     this.route.params
       .subscribe(
         (params: Params) => {
-          this.page = +params['page'];
-          this.reloadPage();
+          const newPage = +params['page'];
+          if (this.page != newPage) {
+            this.page = newPage;
+            this.reloadPage();
+          }
+
+          const newPosition = +params['position'];
+          if (newPosition && newPosition != this.position) {
+              this.dataService.openMode = 'ayat';
+              this.dataService.isItemHidden = true;
+              this.rehide();
+              this.dataService.setFirstItemFocus(0, this.route.snapshot.params['position'], false);
+          }
         }
       );
   }
@@ -78,7 +90,7 @@ export class PagesContainerComponent implements OnInit {
     this.router.navigate([this.kiri + 1], { queryParamsHandling: "merge", replaceUrl: true });
   }
 
-  prevPage() {    
+  prevPage() {
     this.dataService.setFirstItemFocus(0, 0);
     this.router.navigate([this.kanan - 1], { queryParamsHandling: "merge", replaceUrl: true });
   }

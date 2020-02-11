@@ -16,6 +16,7 @@ import { PagesContainerComponent } from './pages-container/pages-container.compo
 import { HomeComponent } from './home/home.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { ReminderComponent } from './reminder/reminder.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { environment } from '../environments/environment';
     PagesContainerComponent,
     PageComponent,
     AyatComponent,
-    WordComponent
+    WordComponent,
+    ReminderComponent
   ],
   imports: [
     BrowserModule,
