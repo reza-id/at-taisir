@@ -1,0 +1,5 @@
+<div style="padding: 20px; height: 100%;" fxLayout='column' fxLayoutAlign="center center" dir="ltr">
+    <button mat-raised-button color="primary" (click)="permitToNotify()">GET TOKEN</button><br>
+    <input type="text" [(ngModel)]="displayToken" #inputToken>
+    <button (click)="copyInputMessage(inputToken)" aria-label="click to copy" mat-stroked-button>Copy token</button>
+</div>

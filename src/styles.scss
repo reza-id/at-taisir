@@ -26,4 +26,5 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 .hidden, .hidden:hover {
   color: transparent;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
