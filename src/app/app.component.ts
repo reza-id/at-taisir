@@ -51,19 +51,7 @@ export class AppComponent implements OnInit {
     }
   ];
 
-  notifData;
-
-  constructor(private dataService: DataService, public router: Router, push: SwPush) {
-
-    push.messages.subscribe(notif => {            
-      this.notifData = notif['data'];
-    });
-    push.notificationClicks.subscribe(click => {
-      if (this.notifData) {
-        router.navigate([`notif/${this.notifData.page}/${this.notifData.index}`]);
-      }        
-    });
-
+  constructor(private dataService: DataService, public router: Router, public push: SwPush) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         gtag('config', 'UA-155053975-1',
@@ -73,6 +61,12 @@ export class AppComponent implements OnInit {
         );
       }
     })
+
+    this.push.notificationClicks.subscribe(click => {
+      if (click.notification.data) {
+        this.router.navigate([`notif/${click.notification.data['page']}/${click.notification.data['index']}`], { replaceUrl: true });
+      }
+    });
   }
 
   ngOnInit() {
